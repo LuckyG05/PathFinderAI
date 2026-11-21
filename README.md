@@ -47,6 +47,8 @@ Instead of giving scattered chat replies, PathFinder AI walks you through a comp
 ## Engineering & Architecture Highlights
 
 - **100% Free High-Availability LLM Router (`core/llm_engine.py`):** Routes primary traffic to **Groq Cloud** (`openai/gpt-oss-120b` → `qwen/qwen3.8-27b` → `openai/gpt-oss-20b`) for fast responses, with automatic failover to **Google Gemini Free Tier** (`gemini-3.5-flash` → `gemini-3.5-flash-lite` → `gemini-3.6-flash`) if rate limits or traffic spikes occur.
+
+  
 - **Strict Structured Outputs & Safe Grading (`core/schemas.py`):** Uses Pydantic v2 schemas (`RoadmapResponse`, `MCQQuestion`, `QuizBatchResponse`) to eliminate brittle string parsing, generate full quiz batches in a single API call, and grade MCQs deterministically (preventing edge-case bugs like empty input `"" in "A"` evaluating to `True`).
 - **Normalized SQLite Persistence (`core/database.py`):** 3 relational tables (`roadmaps`, `topics`, `quiz_attempts`) with parameterized queries, `PRAGMA foreign_keys = ON`, `ON DELETE CASCADE`, `CHECK` constraints, and `LEFT JOIN + GROUP BY` progress aggregations.
 - **Lightweight PDF RAG Pipeline (`core/rag_pipeline.py`):** `pypdf` extraction with `[Page N]` citations, overlapping sliding-window chunking (`chunk_size=1200, overlap=200`), and lexical keyword-overlap retrieval.
